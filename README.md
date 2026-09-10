@@ -20,8 +20,8 @@
 
 | # | Sintoma observado (o que fiz/vi) | Causa raiz (arquivo e linha aproximada) | Correção aplicada | Conceito da disciplina |
 |---|---|---|---|---|
-| bug01 | | | | |
-| bug02 | | | | |
+| bug01 | GET /api/conteudos/{id} em um id inexistente retornou corpo vazio com status 200 em vez de erro | ConteudoController.buscarPorId(), o catch (Exception e) captura a ConteudoNaoEncontradoException e não faz nada com ela (possuia apenas um comentário "TODO: tratar isso depois"), retornando null | Removi o try/catch e deixei a exceção seguir até o GlobalExceptionHandler, que já tinha um tratamento pronto para ConteudoNaoEncontradoException | Tratamento de exceções / propagação de erros (não capturar exceção sem tratá-la) |
+| bug02 | GET /api/conteudos/categoria/{categoria} e a lista voltou vazia mesmo com filmes de categorias cadastradas | ConteudoController.listarPorCategoria(), comparação c.getCategoria() == categoria estava comparando a referência das Strings, não o conteúdo da String | Troquei para c.getCategoria().equalsIgnoreCase(categoria) | Comparação de objetos em Java |
 | bug03 | | | | |
 | bug04 | | | | |
 | bug05 | | | | |
