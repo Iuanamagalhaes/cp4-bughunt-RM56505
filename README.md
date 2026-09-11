@@ -37,7 +37,7 @@
 
 | # | Onde estava | Qual princípio/boas práticas era violado | O que eu mudei |
 |---|---|---|---|
-| clean01 | | | |
+| clean01 | ConteudoController, bloco comentado | Código comentado não deve ficar no repositório, o histórico já é mantido pelo Git | Removi o bloco comentado |
 | clean02 | | | |
 | clean03 | | | |
 | clean04 | | | |
