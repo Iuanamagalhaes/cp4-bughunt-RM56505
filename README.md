@@ -38,7 +38,7 @@
 | # | Onde estava | Qual princípio/boas práticas era violado | O que eu mudei |
 |---|---|---|---|
 | clean01 | ConteudoController, bloco comentado | Código comentado não deve ficar no repositório, o histórico já é mantido pelo Git | Removi o bloco comentado |
-| clean02 | | | |
+| clean02 | ConteudoController.calcularDescontoAntigo(double preco), método privado que nunca é chamado em nenhum lugar do código | Código morto não deve permanecer no projeto | Removi o método inteiro |
 | clean03 | | | |
 | clean04 | | | |
 | clean05 | | | |
