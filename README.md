@@ -39,9 +39,9 @@
 |---|---|---|---|
 | clean01 | ConteudoController, bloco comentado | Código comentado não deve ficar no repositório, o histórico já é mantido pelo Git | Removi o bloco comentado |
 | clean02 | ConteudoController.calcularDescontoAntigo(double preco), método privado que nunca é chamado em nenhum lugar do código | Código morto não deve permanecer no projeto | Removi o método inteiro |
-| clean03 | | | |
-| clean04 | | | |
-| clean05 | | | |
+| clean03 |  Usuario.alugar(), parâmetro c e variável local p com nomes pouco descritivos, que não deixavam claro o que cada um representava no método | Nomes de variáveis devem ser significativos e deixar claro o que representam | Renomeei p para preco e c para conteudo |
+| clean04 | Usuario.debitarCreditos(), comentário informando que o valor era adicionado aos créditos, quando o código na verdade fazia uma subtração | Comentário não condiz com o que o código realmente faz | Corrigi para: debita (subtrai) o valor dos créditos do usuário |
+| clean05 | Usuario.alugar(), vários System.out.println() responsáveis por montar e exibir o recibo dentro do método de aluguel | Viola o princípio da SRP (responsabilidade única), pois a Model Usuario estava assumindo também a responsabilidade de exibir o recibo ao usuário | Removi as impressões da model |
 | clean06 | | | |
 
 ---
