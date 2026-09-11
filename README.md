@@ -22,9 +22,9 @@
 |---|---|---|---|---|
 | bug01 | GET /api/conteudos/{id} em um id inexistente retornou corpo vazio com status 200 em vez de erro | ConteudoController.buscarPorId(), o catch (Exception e) captura a ConteudoNaoEncontradoException e não faz nada com ela (possuia apenas um comentário "TODO: tratar isso depois"), retornando null | Removi o try/catch e deixei a exceção seguir até o GlobalExceptionHandler, que já tinha um tratamento pronto para ConteudoNaoEncontradoException | Tratamento de exceções / propagação de erros (não capturar exceção sem tratá-la) |
 | bug02 | GET /api/conteudos/categoria/{categoria} e a lista voltou vazia mesmo com filmes de categorias cadastradas | ConteudoController.listarPorCategoria(), comparação c.getCategoria() == categoria estava comparando a referência das Strings, não o conteúdo da String | Troquei para c.getCategoria().equalsIgnoreCase(categoria) | Comparação de objetos em Java |
-| bug03 | | | | |
-| bug04 | | | | |
-| bug05 | | | | |
+| bug03 | Série cadastrada voltava com título, categoria, duração e classificação nulos | Construtor Serie(String, String, int, int, int) não chama super | Adicionei super(titulo, categoria, duracaoMinutos, classificacaoEtaria, true) no início do construtor | Herança e encadeamento de construtores com super() |
+| bug04 | O preço de uma série com mais de uma temporada veio no preço padrão (R$ 9,90), em vez de ajustado | Serie.calcularPrecoAluguel(double desconto), assinatura diferente do método da superclasse (sobrecarga, não sobrescreve, então nunca é chamado) | Corrigi a assinatura para @Override public double calcularPrecoAluguel() sem parâmetro | Polimorfismo, sobrescrita (@Override) e sobrecarga de métodos |
+| bug05 | GET /{id}/preco-promocional de um filme e o preço promocional veio maior que o preço normal | Filme.aplicarPromocao(double preco), aumenta 20% em vez de aplicar desconto | Corrigi para return preco * 0.8 (desconto de 20%, conforme contrato e a documentação da interface Promocionavel) | Interfaces e contrato de comportamento ("deve aplicar 20% de desconto") |
 | bug06 | | | | |
 | bug07 | | | | |
 | bug08 | | | | |
