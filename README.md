@@ -8,7 +8,7 @@
 
 | Campo | |
 |---|---|
-| **Total de bugs corrigidos** | ___ / 12 |
+| **Total de bugs corrigidos** | 12 / 12 |
 | **Total de ajustes de Clean Code** | 7 / 6 |
 
 ---
@@ -31,7 +31,7 @@
 | bug09 | Ao cadastrar um usuário, o campo id retornava como null tanto na resposta da API quanto no banco de dados | Usuario, campo id anotado apenas com @Id, sem nenhuma configuração para gerar o identificador automaticamente | Adicionei @GeneratedValue(strategy = GenerationType.IDENTITY) acima do @Id para que o identificador seja gerado automaticamente | Geração automática de chave primária (JPA / mapeamento objeto-relacional) |
 | bug10 | Era possível cadastrar filmes, séries e documentários com duracaoMinutos igual a 0 ou com valor negativo | Os endpoints de cadastro em ConteudoController não verificavam se a duração informada era válida | Criei a exceção ConteudoInvalidoException, adicionei o tratamento para retornar 400 Bad Request e incluí a validação de duração nos três endpoints de cadastro | Validação de dados de entrada |
 | bug11 | Ao tentar alugar um conteúdo com classificação etária incompatível, a API retornava um erro 500 genérico em vez de explicar o motivo | A ClassificacaoIndicativaException não tinha um tratamento específico no GlobalExceptionHandler | Adicionei um @ExceptionHandler para ClassificacaoIndicativaException, retornando 403 Forbidden com a mensagem da exceção | Tratamento de exceções / @RestControllerAdvice |
-| bug12 | | | | |
+| bug12 | GET /api/conteudos/{id}/preco-promocional de um documentário retornava o preço padrão em vez de ser gratuito | Documentario não sobrescrevia o método calcularPrecoAluguel(), então herdava o comportamento padrão da classe Conteudo | Adicionei a sobrescrita de calcularPrecoAluguel() em Documentario, retornando 0.0 | Herança e sobrescrita de métodos (@Override) |
 
 ## Parte 2 — Ajustes de Clean Code
 
