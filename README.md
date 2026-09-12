@@ -25,9 +25,9 @@
 | bug03 | Série cadastrada voltava com título, categoria, duração e classificação nulos | Construtor Serie(String, String, int, int, int) não chama super | Adicionei super(titulo, categoria, duracaoMinutos, classificacaoEtaria, true) no início do construtor | Herança e encadeamento de construtores com super() |
 | bug04 | O preço de uma série com mais de uma temporada veio no preço padrão (R$ 9,90), em vez de ajustado | Serie.calcularPrecoAluguel(double desconto), assinatura diferente do método da superclasse (sobrecarga, não sobrescreve, então nunca é chamado) | Corrigi a assinatura para @Override public double calcularPrecoAluguel() sem parâmetro | Polimorfismo, sobrescrita (@Override) e sobrecarga de métodos |
 | bug05 | GET /{id}/preco-promocional de um filme e o preço promocional veio maior que o preço normal | Filme.aplicarPromocao(double preco), aumenta 20% em vez de aplicar desconto | Corrigi para return preco * 0.8 (desconto de 20%, conforme contrato e a documentação da interface Promocionavel) | Interfaces e contrato de comportamento ("deve aplicar 20% de desconto") |
-| bug06 | | | | |
-| bug07 | | | | |
-| bug08 | | | | |
+| bug06 | O usuário era cadastrado com um nome, mas o campo nome retornava como null | No construtor, nome = nome atribuía o parâmetro a ele mesmo, sem salvar o valor no campo da classe | Corrigi para this.nome = nome, fazendo com que o nome informado fosse salvo corretamente no campo da classe | O parâmetro e o atributo tinham o mesmo nome, causando confusão na hora de identificar qual variável estava sendo usada (shadowing) |
+| bug07 | O usuário conseguia realizar um aluguel mesmo sem ter créditos suficientes, ficando com o saldo negativo | O método temCreditosSuficientes() comparava os valores de forma invertida, fazendo com que a verificação de créditos suficientes retornasse um resultado incorreto | Corrigi para return this.creditos >= preco | Lógica booleana e comparação de valores |
+| bug08 | Um conteúdo marcado como indisponível ainda conseguia ser alugado normalmente | Usuario.alugar(Conteudo conteudo), não verificava se o conteúdo estava disponível antes de realizar o aluguel, mesmo já existindo uma exceção para esse caso | Adicionei uma verificação no início do método para impedir o aluguel de conteúdos que não estão disponíveis (if (!conteudo.isDisponivel()) throw new ConteudoIndisponivelException(...)) | Validação de regra de negócio e uso de exceção customizada |
 | bug09 | | | | |
 | bug10 | | | | |
 | bug11 | | | | |
