@@ -7,6 +7,9 @@ public class Serie extends Conteudo implements Promocionavel {
 
     private int numeroTemporadas;
 
+    private static final double PRECO_POR_TEMPORADA = 4.90;
+    private static final double DESCONTO_PROMOCAO = 0.8;
+
     public Serie() {
     }
 
@@ -19,12 +22,12 @@ public class Serie extends Conteudo implements Promocionavel {
     // preço da série: 4.90 por temporada
     @Override
     public double calcularPrecoAluguel() {
-        return 4.90 * numeroTemporadas;
+        return PRECO_POR_TEMPORADA  * numeroTemporadas;
     }
 
     @Override
     public double aplicarPromocao(double preco) {
-        return preco * 0.8;
+        return preco * DESCONTO_PROMOCAO;
     }
 
     public int getNumeroTemporadas() { return numeroTemporadas; }

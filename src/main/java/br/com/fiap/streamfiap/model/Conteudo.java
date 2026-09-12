@@ -18,6 +18,8 @@ public abstract class Conteudo {
     private int classificacaoEtaria;
     private boolean disponivel;
 
+    private static final double PRECO_ALUGUEL = 9.90;
+
     protected Conteudo() {
     }
 
@@ -30,7 +32,7 @@ public abstract class Conteudo {
     }
 
     public double calcularPrecoAluguel() {
-        return 9.90;
+        return PRECO_ALUGUEL;
     }
 
     public double calcularPrecoPromocional() {
