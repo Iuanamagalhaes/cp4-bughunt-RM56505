@@ -9,7 +9,7 @@
 | Campo | |
 |---|---|
 | **Total de bugs corrigidos** | ___ / 12 |
-| **Total de ajustes de Clean Code** | ___ / 6 |
+| **Total de ajustes de Clean Code** | 7 / 6 |
 
 ---
 
@@ -21,16 +21,16 @@
 | # | Sintoma observado (o que fiz/vi) | Causa raiz (arquivo e linha aproximada) | Correção aplicada | Conceito da disciplina |
 |---|---|---|---|---|
 | bug01 | GET /api/conteudos/{id} em um id inexistente retornou corpo vazio com status 200 em vez de erro | ConteudoController.buscarPorId(), o catch (Exception e) captura a ConteudoNaoEncontradoException e não faz nada com ela (possuia apenas um comentário "TODO: tratar isso depois"), retornando null | Removi o try/catch e deixei a exceção seguir até o GlobalExceptionHandler, que já tinha um tratamento pronto para ConteudoNaoEncontradoException | Tratamento de exceções / propagação de erros (não capturar exceção sem tratá-la) |
-| bug02 | GET /api/conteudos/categoria/{categoria} e a lista voltou vazia mesmo com filmes de categorias cadastradas | ConteudoController.listarPorCategoria(), comparação c.getCategoria() == categoria estava comparando a referência das Strings, não o conteúdo da String | Troquei para c.getCategoria().equalsIgnoreCase(categoria) | Comparação de objetos em Java |
+| bug02 | GET /api/conteudos/categoria/{categoria} e a lista voltou vazia mesmo com filmes de categorias cadastradas | ConteudoController.listarPorCategoria(), comparação c.getCategoria() == categoria estava comparando a referência das Strings, não o conteúdo da String | Substituí a busca manual pelo método findByCategoria() que já existia no ConteudoRepository | Comparação de objetos em Java |
 | bug03 | Série cadastrada voltava com título, categoria, duração e classificação nulos | Construtor Serie(String, String, int, int, int) não chama super | Adicionei super(titulo, categoria, duracaoMinutos, classificacaoEtaria, true) no início do construtor | Herança e encadeamento de construtores com super() |
 | bug04 | O preço de uma série com mais de uma temporada veio no preço padrão (R$ 9,90), em vez de ajustado | Serie.calcularPrecoAluguel(double desconto), assinatura diferente do método da superclasse (sobrecarga, não sobrescreve, então nunca é chamado) | Corrigi a assinatura para @Override public double calcularPrecoAluguel() sem parâmetro | Polimorfismo, sobrescrita (@Override) e sobrecarga de métodos |
 | bug05 | GET /{id}/preco-promocional de um filme e o preço promocional veio maior que o preço normal | Filme.aplicarPromocao(double preco), aumenta 20% em vez de aplicar desconto | Corrigi para return preco * 0.8 (desconto de 20%, conforme contrato e a documentação da interface Promocionavel) | Interfaces e contrato de comportamento ("deve aplicar 20% de desconto") |
 | bug06 | O usuário era cadastrado com um nome, mas o campo nome retornava como null | No construtor, nome = nome atribuía o parâmetro a ele mesmo, sem salvar o valor no campo da classe | Corrigi para this.nome = nome, fazendo com que o nome informado fosse salvo corretamente no campo da classe | O parâmetro e o atributo tinham o mesmo nome, causando confusão na hora de identificar qual variável estava sendo usada (shadowing) |
 | bug07 | O usuário conseguia realizar um aluguel mesmo sem ter créditos suficientes, ficando com o saldo negativo | O método temCreditosSuficientes() comparava os valores de forma invertida, fazendo com que a verificação de créditos suficientes retornasse um resultado incorreto | Corrigi para return this.creditos >= preco | Lógica booleana e comparação de valores |
 | bug08 | Um conteúdo marcado como indisponível ainda conseguia ser alugado normalmente | Usuario.alugar(Conteudo conteudo), não verificava se o conteúdo estava disponível antes de realizar o aluguel, mesmo já existindo uma exceção para esse caso | Adicionei uma verificação no início do método para impedir o aluguel de conteúdos que não estão disponíveis (if (!conteudo.isDisponivel()) throw new ConteudoIndisponivelException(...)) | Validação de regra de negócio e uso de exceção customizada |
-| bug09 | | | | |
-| bug10 | | | | |
-| bug11 | | | | |
+| bug09 | Ao cadastrar um usuário, o campo id retornava como null tanto na resposta da API quanto no banco de dados | Usuario, campo id anotado apenas com @Id, sem nenhuma configuração para gerar o identificador automaticamente | Adicionei @GeneratedValue(strategy = GenerationType.IDENTITY) acima do @Id para que o identificador seja gerado automaticamente | Geração automática de chave primária (JPA / mapeamento objeto-relacional) |
+| bug10 | Era possível cadastrar filmes, séries e documentários com duracaoMinutos igual a 0 ou com valor negativo | Os endpoints de cadastro em ConteudoController não verificavam se a duração informada era válida | Criei a exceção ConteudoInvalidoException, adicionei o tratamento para retornar 400 Bad Request e incluí a validação de duração nos três endpoints de cadastro | Validação de dados de entrada |
+| bug11 | Ao tentar alugar um conteúdo com classificação etária incompatível, a API retornava um erro 500 genérico em vez de explicar o motivo | A ClassificacaoIndicativaException não tinha um tratamento específico no GlobalExceptionHandler | Adicionei um @ExceptionHandler para ClassificacaoIndicativaException, retornando 403 Forbidden com a mensagem da exceção | Tratamento de exceções / @RestControllerAdvice |
 | bug12 | | | | |
 
 ## Parte 2 — Ajustes de Clean Code
@@ -42,7 +42,8 @@
 | clean03 |  Usuario.alugar(), parâmetro c e variável local p com nomes pouco descritivos, que não deixavam claro o que cada um representava no método | Nomes de variáveis devem ser significativos e deixar claro o que representam | Renomeei p para preco e c para conteudo |
 | clean04 | Usuario.debitarCreditos(), comentário informando que o valor era adicionado aos créditos, quando o código na verdade fazia uma subtração | Comentário não condiz com o que o código realmente faz | Corrigi para: debita (subtrai) o valor dos créditos do usuário |
 | clean05 | Usuario.alugar(), vários System.out.println() responsáveis por montar e exibir o recibo dentro do método de aluguel | Viola o princípio da SRP (responsabilidade única), pois a Model Usuario estava assumindo também a responsabilidade de exibir o recibo ao usuário | Removi as impressões da model |
-| clean06 | | | |
+| clean06 | Valores fixos estavam espalhados pelas classes Conteudo, Filme e Serie | Números fixos usados diretamente nos cálculos, sem nomes que deixassem claro o que cada valor representava | Substituí os números fixos por constantes com nomes que deixam claro o que cada valor representa |
+| clean07 | Conteudo.duracaoMinutos | O atributo era o único da classe que estava como public, permitindo que outras classes acessassem seu valor diretamente | Mudei duracaoMinutos para private e atualizei os controllers para acessar os atributos usando seus getters, como getCategoria() e getDuracaoMinutos(), em vez de acessar os campos diretamente |
 
 ---
 
