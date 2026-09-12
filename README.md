@@ -9,7 +9,7 @@
 | Campo | |
 |---|---|
 | **Total de bugs corrigidos** | ___ / 12 |
-| **Total de ajustes de Clean Code** | ___ / 6 |
+| **Total de ajustes de Clean Code** | 7 / 6 |
 
 ---
 
@@ -42,7 +42,8 @@
 | clean03 |  Usuario.alugar(), parâmetro c e variável local p com nomes pouco descritivos, que não deixavam claro o que cada um representava no método | Nomes de variáveis devem ser significativos e deixar claro o que representam | Renomeei p para preco e c para conteudo |
 | clean04 | Usuario.debitarCreditos(), comentário informando que o valor era adicionado aos créditos, quando o código na verdade fazia uma subtração | Comentário não condiz com o que o código realmente faz | Corrigi para: debita (subtrai) o valor dos créditos do usuário |
 | clean05 | Usuario.alugar(), vários System.out.println() responsáveis por montar e exibir o recibo dentro do método de aluguel | Viola o princípio da SRP (responsabilidade única), pois a Model Usuario estava assumindo também a responsabilidade de exibir o recibo ao usuário | Removi as impressões da model |
-| clean06 | | | |
+| clean06 | Valores fixos estavam espalhados pelas classes Conteudo, Filme e Serie | Números fixos usados diretamente nos cálculos, sem nomes que deixassem claro o que cada valor representava | Substituí os números fixos por constantes com nomes que deixam claro o que cada valor representa |
+| clean07 | Conteudo.duracaoMinutos | O atributo era o único da classe que estava como public, permitindo que outras classes acessassem seu valor diretamente | Mudei duracaoMinutos para private e atualizei os controllers para acessar os atributos usando seus getters, como getCategoria() e getDuracaoMinutos(), em vez de acessar os campos diretamente |
 
 ---
 
